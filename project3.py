@@ -91,7 +91,10 @@ for i in range(channel):
 for j in range(9):            
     for i in range(channel):
         threshold = (j+1)/10
+<<<<<<< HEAD
         #bad channel，向左右找最近的good channel
+=======
+>>>>>>> 8e30e71434f8cb976c09447d27900e0c8249f1e3
         if (bad_channel[i][j] != 0):
             p1 = i
             p2 = i
