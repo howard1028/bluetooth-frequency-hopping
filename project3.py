@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 channel = 79
 channel_prob = [] #channel出現次數
-device_num = 20 #device數
+device_num = 70 #device數
 prev_channel = [] #每個device上次挑選的channel
 collision_time = 0
 hop_per_sec = 1600 #每秒跳頻次數
@@ -91,7 +91,7 @@ for i in range(channel):
 for j in range(9):            
     for i in range(channel):
         threshold = (j+1)/10
-
+        #bad channel，向左右找最近的good channel
         if (bad_channel[i][j] != 0):
             p1 = i
             p2 = i
@@ -118,26 +118,29 @@ for j in range(9):
                     bad_channel[i][j] = p2+1
 
 print("bad_channel=",bad_channel)
-p=[]
+
+p=[] #new碰撞機率
 for k in range(9):
     collision = [0]*79
     for i in range(sec*hop_per_sec):
         choice_channel=[0]*79
         for j in range(device_num):
-            bad_channel[hopping_sequence[j][i%79]][k]
-            hopping_sequence[j][i%79]
+            #good channel，選到該channel次數+1
             if bad_channel[hopping_sequence[j][i%79]][k]==0:
                 choice_channel[hopping_sequence[j][i%79]]+=1
+            #bad channel，跳到最近good channel
             else:
                 choice_channel[bad_channel[hopping_sequence[j][i%79]][k]-1]+=1
+        #兩個以上選到擇有碰撞
         for j in range(len(choice_channel)):
             if choice_channel[j] > 1:
                 collision[j]+=choice_channel[j]
     #print(collision)
     sum=0
     for i in range(len(collision)):
-        sum+=collision[i]
-    sum=sum/sec/hop_per_sec/device_num
+        sum += collision[i]
+    # sum=sum/sec/hop_per_sec/device_num
+    sum /= sec*hop_per_sec*device_num
     p+=[sum]
 print(p)
 
@@ -159,5 +162,5 @@ plt.bar(C, p, color='b',width=0.05)
 plt.xlabel('Threshold ζ') # 設定x軸標題
 plt.ylabel('Average collision probability') # 設定y軸標題
 # plt.xticks(C, rotation='vertical') # 設定x軸label以及垂直顯示
-plt.title('device = 20') # 設定圖表標題
+plt.title('device = 70') # 設定圖表標題
 plt.show()
